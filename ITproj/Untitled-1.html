@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>saving</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        max-width: 400px;
+        background-color: #f9f9f9;
+      }
+      label {
+        margin-top: 10px;
+        display: block;
+      }
+      input[type="number"],
+      input[type="text"] {
+        width: calc(100% - 22px);
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 10px 15px;
+        margin-right: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <label for="limit"
+      >Expenditure Warning in month(Warn you when you meet the limit):
+      $HKD</label
+    >
+    <input type="number" id="limit" name="limit" readonly />
+    <button id="change">Change</button>
+    <button id="reset1">Reset</button><br />
+    <label for="save">Today saving</label>
+    <input type="number" name="save" id="save" />
+    <button id="confirm">Confirm</button><br />
+    <label for="total">Total money you have saved $HKD</label>
+    <input type="text" name="total" id="total" readonly />
+    <button id="reset2">Reset</button>
+
+    <script>
+      let outcome = 100;
+      let limitO = localStorage.getItem("limit_S") || 0;
+      document.getElementById("limit").value = limitO;
+      if (outcome >= limitO && limitO > 0) {
+        window.alert(
+          "You reach the limit!!! You need to have a better plan to use money"
+        );
+      }
+      document.getElementById("change").addEventListener("click", function () {
+        const newValue = window.prompt("Enter new value:");
+        if (newValue !== null && !isNaN(newValue)) {
+          limitO = newValue;
+          document.getElementById("limit").value = limitO;
+          localStorage.setItem("limit_S", limitO);
+          if (outcome >= limitO && limitO > 0) {
+            window.alert(
+              "You reach the limit!!! You need to have a better plan to use money"
+            );
+          }
+        }
+      });
+      let saveM = document.getElementById("save");
+      let total_S = localStorage.getItem("total_S");
+      document.getElementById("total").value = total_S;
+      document.getElementById("confirm").addEventListener("click", function () {
+        totalSave =
+          Number(localStorage.getItem("total_S")) + Number(saveM.value);
+        saveM.value = "";
+        document.getElementById("total").value = totalSave;
+        localStorage.setItem("total_S", totalSave);
+      });
+      document.getElementById("reset2").addEventListener("click", function () {
+        totalSave = "";
+        localStorage.setItem("total_S", totalSave);
+        window.alert("The total save have been reset ");
+        location.reload();
+      });
+      document.getElementById("reset1").addEventListener("click", function () {
+        limit = 0;
+        localStorage.setItem("limit_S", limit);
+        window.alert("The limit have been reset ");
+        location.reload();
+      });
+    </script>
+  </body>
+</html>
