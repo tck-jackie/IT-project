@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        color: #fff;
+      }
+      .container {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        text-align: center;
+        background-color: #444;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .header h1 {
+        margin: 0;
+        color: #fff;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input,
+      select,
+      button {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #222;
+        color: #fff;
+      }
+      button {
+        background-color: #444;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #666;
+      }
+      .chart-container {
+        margin-top: 20px;
+        background: #222;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+      }
+      .expense-list {
+        margin-top: 20px;
+      }
+      .expense-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .actions {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+      .actions button {
+        width: 50%;
+      }
+      .delete-button {
+        background-color: #ff6347;
+        border: none;
+        padding: 5px 5px;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+      }
+      .delete-button:hover {
+        background-color: #ff4500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Expense Tracker</h1>
+      </div>
+      <div>
+        <form id="expense-form">
+          <div class="form-group">
+            <label for="category">Expense Category</label>
+            <input
+              type="text"
+              id="category"
+              placeholder="Enter category (e.g. Food, Rent)"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input
+              type="number"
+              id="amount"
+              min="1"
+              placeholder="Enter amount"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" required />
+          </div>
+          <button type="submit">Add Expense</button>
+        </form>
+      </div>
+      <div class="chart-container">
+        <canvas id="expense-chart"></canvas>
+      </div>
+      <div class="expense-list" id="expense-list"></div>
+      <div class="actions">
+        <button id="save-data">Save Data</button>
+        <button id="clear-data">Clear Data</button>
+      </div>
+    </div>
+    <script>
+      const expenseForm = document.getElementById("expense-form");
+      const expenseList = document.getElementById("expense-list");
+      const expenseChartCanvas = document.getElementById("expense-chart");
+      const saveDataButton = document.getElementById("save-data");
+      const clearDataButton = document.getElementById("clear-data");
+      let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+      let chart;
+
+      // Initialize the chart
+      function initializeChart() {
+        chart = new Chart(expenseChartCanvas, {
+          type: "doughnut",
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label: "Expenses",
+                data: [],
+                backgroundColor: [
+                  "#FFD700",
+                  "#FF6347",
+                  "#87CEEB",
+                  "#32CD32",
+                  "#FF69B4",
+                  "#FFA500",
+                  "#9370DB",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "right",
+              },
+            },
+          },
+        });
+      }
+
+      // Update the chart
+      function updateChart() {
+        const categories = {};
+        expenses.forEach((expense) => {
+          categories[expense.category] =
+            (categories[expense.category] || 0) + expense.amount;
+        });
+        chart.data.labels = Object.keys(categories);
+        chart.data.datasets[0].data = Object.values(categories);
+        chart.update();
+      }
+
+      // Render the expense list
+      function renderExpenseList() {
+        expenseList.innerHTML = "";
+        expenses.forEach((expense, index) => {
+          const expenseItem = document.createElement("div");
+          expenseItem.classList.add("expense-item");
+          expenseItem.innerHTML = `
+                    <span>${expense.category} - ${expense.date}</span>
+                    <span>${expense.amount.toFixed(2)} HKD</span>
+                    <button class="delete-button" data-index="${index}">Delete</button>
+                `;
+          expenseList.appendChild(expenseItem);
+        });
+
+        // Add event listeners to delete buttons
+        document.querySelectorAll(".delete-button").forEach((button) => {
+          button.addEventListener("click", (e) => {
+            const index = parseInt(e.target.getAttribute("data-index"), 10);
+            expenses.splice(index, 1); // Remove the expense from the list
+            renderExpenseList();
+            updateChart();
+          });
+        });
+      }
+
+      // Handle form submission
+      expenseForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const category = document.getElementById("category").value.trim();
+        const amount = parseFloat(document.getElementById("amount").value);
+        const date = document.getElementById("date").value;
+        if (!category || !amount || !date) return;
+        expenses.push({ category, amount, date });
+        renderExpenseList();
+        updateChart();
+        expenseForm.reset();
+      });
+
+      // Save data
+      saveDataButton.addEventListener("click", () => {
+        localStorage.setItem("expenses", JSON.stringify(expenses));
+        alert("Data saved successfully!");
+      });
+
+      // Clear all data
+      clearDataButton.addEventListener("click", () => {
+        if (confirm("Are you sure you want to clear all data?")) {
+          expenses = [];
+          renderExpenseList();
+          updateChart();
+          localStorage.removeItem("expenses");
+        }
+      });
+
+      initializeChart();
+      renderExpenseList();
+      updateChart();
+    </script>
+  </body>
+</html>

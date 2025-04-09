@@ -1,0 +1,299 @@
+:root{
+  --base-background-color : rgb(245, 245, 245);
+  --menu-background-color : rgb(0, 255, 73, 30%);
+  --side-menu-background-color : rgb(109, 227, 188);
+  --side-menu-hover : rgb(54, 107, 89);
+  --login-button-background :rgb(85, 216, 127);
+  --account-box-background: white;
+  --text-color : black;
+  --input-box-color : white;
+  --input-box-text-color : black;
+  --input-box-border :#ccc ;
+  --create-acc-color : blue;
+  --box-shadow : rgb(200, 200, 200);
+  --inc-exp-th-background: rgb(130, 130, 130);
+  --inc-exp-td-background-odd: rgb(178, 178, 178);
+  --inc-exp-td-background-even: rgb(152, 152, 152);
+}
+.dark-mode{
+  --base-background-color : #1A1A1A; 
+  --account-box-background: #1F1F1F;
+  --side-menu-background-color : rgb(52, 107, 89);
+  --side-menu-hover : rgb(45, 81, 69);
+  --input-box-color: black;
+  --text-color : white ; 
+  --input-box-border: #3A3A3A;
+  --create-acc-color : #2196F3;
+  --input-box-text-color : white;
+  --box-shadow : rgb(37, 37, 37);
+  --inc-exp-th-background: rgb(47, 47, 47);
+  --inc-exp-td-background-odd: rgb(65, 65, 65);
+  --inc-exp-td-background-even: rgb(96, 96, 96);
+}
+#dark-icon{
+  width: 40px;
+  height: 40px;
+  fill: #454545;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} 
+#dark-icon:hover{
+  background-color: #87ae87;
+}
+#light-icon{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+#light-icon:hover{
+  background-color: #8aaf81;
+}
+body {
+  background-color: var(--base-background-color);
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  transition: background-color 0.5s;
+}
+.box { 
+  display: flex;
+  height: 90vh;
+}
+.menu-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  background-color: var(--menu-background-color);
+  width: 100%;
+  height: 60px;
+}
+.side-menu-background{
+  display: none;
+  position: fixed;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(0, 0, 0, 0.5);
+}
+.side-menu{
+  position: fixed;
+  height: 100%;
+  width: 0;
+  z-index: 2;
+  background-color: var(--side-menu-background-color);
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+.side-menu .side-title{
+  position: absolute;
+  font-size: 48px;
+  top: 10px;
+  right: 170px;
+  padding: 0;
+}
+.side-menu a{
+  text-decoration: none;
+  display: block;
+  font-size: 25px;
+  color:black;
+  padding: 8px 8px 8px 20px;
+  transition: 0.3s;
+  height: 5%;
+  line-height: 100%;
+
+}
+.side-menu .links{
+  white-space: nowrap;
+}
+.side-menu .links a:hover{
+  display: flex;
+  flex-direction: column;
+  background-color: var(--side-menu-hover);
+}
+.side-menu .closeButton{
+  position: absolute;
+  color: black;
+  font-size: 50px;
+  top: 0px;
+  right: 30px;
+}
+
+
+.menu-title {
+  font-size: 35px;
+  height: 52px;
+  line-height: 60px;
+  margin-right: 5px
+}
+.pig-img{
+  height: 60px;
+}
+.menu-button {
+  margin-right: 15px;
+  margin-left: 15px;
+  padding: 0;
+  font-size: 35px;
+  height: 52px;
+  line-height: 60px;
+  float: left;
+}
+.menu-button:hover{
+  cursor: pointer;
+}
+.change-theme{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.login{
+  margin-right: 10px;
+}
+#login #login-link {
+  text-decoration: none;
+  line-height: 60px;
+  padding: 7px;
+  font-size: 30px;
+  color: black;
+  border: 1px solid;
+  border-radius: 5px;
+  background-color: var(--login-button-background);
+} 
+.login-theme-box{
+  width: 500px;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
+}
+#login #name{
+  font-size: 30px;
+  line-height: 60px;
+}
+#login #name a{
+  color: var(--text-color);
+}
+.login-box,
+.create-acc-box {
+  background-color: var(--account-box-background);
+  margin: auto;
+  position: relative;
+  text-align: center;
+  width: 400px;
+  height: 400px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px var(--box-shadow);
+}
+.login-box input,
+.create-acc-box input,
+.inp-exp-form input {
+  background-color: var(--input-box-color);
+  transition: border, background-color 0.5s;
+}
+.title {
+  font-size: 3em;
+  margin-top: 30px;
+}
+#user-name,
+#password,
+#confirm-password,
+#items,
+#amount,
+#date {
+  margin: 10px;
+  height: 2.5em;
+  width: 300px;
+  border-radius: 4px;
+  border: 1px solid var(--input-box-border);
+  color : var(--input-box-text-color);
+}
+#submit-psw,
+#submit-acc,
+#submit_message {
+  width: 300px;
+  height: 2.5em;
+  background-color:  #2196F3;
+  margin: 10px;
+  border-radius: 4px;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+#submit-psw:hover,
+#submit-acc:hover{
+  background-color: rgba(0, 183, 255, 0.5);
+}
+#submit-psw:active,
+#submit-acc:active{
+  background-color: rgba(0, 183, 255, 0.8);
+}
+#create-account a:link,
+#create-account a:visited {
+  color: var(--create-acc-color);
+}
+#create-account a:hover {
+  color: rgb(0, 0, 182);
+}
+#create-account a:active {
+  color: rgb(66, 66, 253);
+}
+#alert-text {
+  color: red;
+  margin-top: 10px;
+}
+
+
+
+
+
+#IncomeOrExpenditure-choice,
+#item-input,
+#amount-input,
+#submit-button,
+#date-input {
+  text-align: center;
+  margin: 10px 0;
+}
+
+#theTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#theTable th,
+#theTable td {
+  border: 1px solid var(--input-box-border);
+  padding: 8px;
+  text-align: left;
+  color: var(--input-box-text-color);
+  transition: color 0.5s;
+}
+
+#theTable thead tr th {
+  background-color: var(--inc-exp-th-background);
+}
+
+#theTable tr:nth-child(odd) {
+  background-color: var(--inc-exp-td-background-odd);
+}
+
+#theTable tr:nth-child(even) {
+  background-color: var(--inc-exp-td-background-even);
+}
+
+.remove-button {
+  background-color: rgb(230, 0, 0);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}

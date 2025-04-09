@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Income and Expenditure</title>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <style></style>
+  </head>
+
+  <body>
+    <!-- menu -->
+    <div
+      class="side-menu-background"
+      id="side-menu-background"
+      onclick="closeMenu()"
+    ></div>
+    <div class="side-menu" id="side-menu">
+      <div class="side-title">Menu</div>
+      <a href="#" onclick="closeMenu()" class="closeButton">&times;</a>
+      <div class="links">
+        <a href="Income-Expenditure.html">Income & Expenditure</a>
+        <a href="analysis.html">Analysis</a>
+      </div>
+    </div>
+
+    <div class="menu-container">
+      <div style="width: 500px">
+        <div class="menu-button" onclick="openMenu()" title="Menu">&#9776;</div>
+        <div style="display: flex">
+          <div class="menu-title">MoneySavior</div>
+          <img class="pig-img" src="money-pig.png" />
+        </div>
+      </div>
+      <div class="login-theme-box">
+        <div class="login" id="login">
+          <a href="login.html" id="login-link">Login</a>
+        </div>
+        <div class="change-theme" onclick="changeTheme()">
+          <!-- Dark mode icon -->
+          <div id="dark-icon" title="Change to dark theme">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+            >
+              <path
+                d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"
+              />
+            </svg>
+          </div>
+          <!-- Light mode icon -->
+          <div id="light-icon" title="Change to light theme">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#e3e3e3"
+            >
+              <path
+                d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  -->
+    <form class="inp-exp-form">
+      <div id="IncomeOrExpenditure-choice">
+        <label for="Income_">Income</label>
+        <input type="radio" id="Income_" name="Category" value="Income" />
+
+        <label for="Expenditure_">Expenditure</label>
+        <input
+          type="radio"
+          id="Expenditure_"
+          name="Category"
+          value="Expenditure"
+        />
+      </div>
+
+      <br />
+      <div id="item-input">
+        Enter the name of item:
+        <input
+          type="text"
+          id="items"
+          placeholder="Enter the items name"
+          required
+        />
+      </div>
+
+      <br />
+      <div id="amount-input">
+        Enter the amount(HKD):
+        <input
+          type="number"
+          id="amount"
+          placeholder="Enter the amount"
+          required
+        />
+      </div>
+      <br />
+      <div id="date-input">
+        Date:
+        <input type="date" id="date" />
+      </div>
+      <div id="submit-button">
+        <input
+          type="submit"
+          id="submit_message"
+          value="complete"
+          onclick="submitInfo()"
+        />
+      </div>
+    </form>
+
+    <br />
+    <p id="demo"></p>
+    <table id="theTable">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Items</th>
+          <th>Amount(HKD)</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      window.onload = function () {
+        load_data();
+        checkLogin();
+        changeTheme();
+      };
+
+      function load_data() {
+        const stored_entry =
+          JSON.parse(localStorage.getItem("Users_Input")) || [];
+        stored_entry.forEach((entry) => {
+          add_row_to_Table(entry);
+        });
+      }
+
+      function submitInfo() {
+        // get the input from users
+        const getIncome = document.getElementById("Income_");
+        const getExpenditure = document.getElementById("Expenditure_");
+
+        let getCategory = "";
+        if (getIncome.checked) {
+          getCategory = getIncome.value;
+        } else if (getExpenditure.checked) {
+          getCategory = getExpenditure.value;
+        } else {
+          return;
+        }
+
+        const items = document.getElementById("items").value;
+        const amount = document.getElementById("amount").value;
+        const date = document.getElementById("date").value;
+
+        const entry = {
+          Category: getCategory,
+          Item: items,
+          Amount: amount,
+          Date: date,
+        };
+
+        // check if any input is empty
+        if (!entry.Item || !entry.Amount || !entry.Date) {
+          return;
+        }
+
+        add_row_to_Table(entry);
+
+        saveData(entry);
+
+        // clear the input inside the current table
+        getIncome.checked = false;
+        getExpenditure.checked = false;
+        document.getElementById("items").value = "";
+        document.getElementById("amount").value = "";
+        document.getElementById("date").value = "";
+      }
+
+      // create new rows after the users submitted the input
+      function add_row_to_Table(entry) {
+        const tablebody = document
+          .getElementById("theTable")
+          .getElementsByTagName("tbody")[0];
+
+        const addnewRow = tablebody.insertRow();
+
+        addnewRow.insertCell(0).textContent = entry.Category;
+        addnewRow.insertCell(1).textContent = entry.Item;
+        addnewRow.insertCell(2).textContent = entry.Amount;
+        addnewRow.insertCell(3).textContent = entry.Date;
+
+        // the choice of removing the row
+        const remove_row = document.createElement("button");
+        remove_row.textContent = "Remove";
+        remove_row.className = "remove-button";
+        remove_row.onclick = function () {
+          const row = this.parentNode.parentNode;
+          row.parentNode.removeChild(row);
+          removeData(entry);
+        };
+
+        // add choice of removing the row
+        addnewRow.insertCell(4).appendChild(remove_row);
+      }
+
+      // save the item in localstorage
+      function saveData(entry) {
+        const stored_entry =
+          JSON.parse(localStorage.getItem("Users_Input")) || [];
+        stored_entry.push(entry);
+        localStorage.setItem("Users_Input", JSON.stringify(stored_entry));
+      }
+
+      // remove item in localStorage
+      function removeData(entry) {
+        let stored_entry =
+          JSON.parse(localStorage.getItem("Users_Input")) || [];
+        stored_entry = stored_entry.filter(
+          (e) =>
+            e.Category !== entry.Category ||
+            e.Item !== entry.Item ||
+            e.Amount !== entry.Amount ||
+            e.Date !== entry.Date
+        );
+
+        localStorage.setItem("Users_Input", JSON.stringify(stored_entry));
+      }
+      document
+        .getElementById("myform")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+        });
+    </script>
+  </body>
+</html>
