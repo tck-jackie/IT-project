@@ -8,7 +8,7 @@ function closeMenu(){
   document.getElementById("side-menu-background").style.display = "none";
 }
 
-//load theme
+//load theme 
 function loadTheme(){
   let theme = localStorage.getItem("Theme");
   if (theme !== null){
@@ -135,9 +135,3 @@ function setCookie(username, mins){
   document.cookie = `username=${username}; expires=${date.toUTCString()}`
 }
 
-// function getLogin(){
-//   let login_list = document.cookie;
-//   login_list = login_list.split("=");
-//   console.log(login_list[1]);
-//   return login_list[1]
-// }

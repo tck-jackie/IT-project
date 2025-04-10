@@ -21,6 +21,7 @@
       <a href="#" onclick="closeMenu()" class="closeButton">&times;</a>
       <div class="links">
         <a href="Income-Expenditure.html">Income & Expenditure</a>
+        <a href="expense-tracker.html">Analysis Graph</a>
         <a href="analysis.html">Analysis</a>
       </div>
     </div>
@@ -70,84 +71,100 @@
     </div>
 
     <!--  -->
-    <form class="inp-exp-form">
-      <div id="IncomeOrExpenditure-choice">
-        <label for="Income_">Income</label>
-        <input type="radio" id="Income_" name="Category" value="Income" />
+    <div class="inc-exp-box">
+      <form class="inp-exp-form" id="inp-exp-form">
+        <div id="IncomeOrExpenditure-choice">
+          <label for="Income_">Income</label>
+          <input
+            type="radio"
+            id="Income_"
+            name="Category"
+            value="Income"
+            required
+          />
 
-        <label for="Expenditure_">Expenditure</label>
-        <input
-          type="radio"
-          id="Expenditure_"
-          name="Category"
-          value="Expenditure"
-        />
-      </div>
+          <label for="Expenditure_">Expenditure</label>
+          <input
+            type="radio"
+            id="Expenditure_"
+            name="Category"
+            value="Expenditure"
+            required
+          />
+        </div>
+
+        <br />
+        <div id="item-input">
+          Enter the name of item:
+          <input
+            type="text"
+            id="items"
+            placeholder="Enter the items name"
+            required
+          />
+        </div>
+
+        <br />
+        <div id="amount-input">
+          Enter the amount(HKD):
+          <input
+            type="number"
+            id="amount"
+            placeholder="Enter the amount"
+            required
+          />
+        </div>
+        <br />
+        <div id="date-input">
+          Date:
+          <input type="date" id="date" />
+        </div>
+        <div id="submit-button">
+          <input
+            type="submit"
+            id="submit_message"
+            value="complete"
+            onclick="submitInfo()"
+          />
+        </div>
+      </form>
 
       <br />
-      <div id="item-input">
-        Enter the name of item:
-        <input
-          type="text"
-          id="items"
-          placeholder="Enter the items name"
-          required
-        />
-      </div>
-
-      <br />
-      <div id="amount-input">
-        Enter the amount(HKD):
-        <input
-          type="number"
-          id="amount"
-          placeholder="Enter the amount"
-          required
-        />
-      </div>
-      <br />
-      <div id="date-input">
-        Date:
-        <input type="date" id="date" />
-      </div>
-      <div id="submit-button">
-        <input
-          type="submit"
-          id="submit_message"
-          value="complete"
-          onclick="submitInfo()"
-        />
-      </div>
-    </form>
-
-    <br />
-    <p id="demo"></p>
-    <table id="theTable">
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Items</th>
-          <th>Amount(HKD)</th>
-          <th>Date</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
+      <p id="demo"></p>
+      <table id="theTable">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Items</th>
+            <th>Amount(HKD)</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <script>
-      window.onload = function () {
-        load_data();
-        checkLogin();
-        changeTheme();
-      };
-
       function load_data() {
-        const stored_entry =
-          JSON.parse(localStorage.getItem("Users_Input")) || [];
-        stored_entry.forEach((entry) => {
-          add_row_to_Table(entry);
-        });
+        let all_data = JSON.parse(localStorage.getItem("all_data"));
+        if (all_data !== null) {
+          const stored_entry = [];
+          let Category = "Income";
+          all_data.income.forEach((element) => {
+            Item = element.category;
+            Amount = element.amount;
+            stored_entry.push({ Category, Item, Amount, Date: element.date });
+          });
+          Category = "Expenditure";
+          all_data.expenditure.forEach((element) => {
+            Item = element.category;
+            Amount = element.amount;
+            stored_entry.push({ Category, Item, Amount, Date: element.date });
+          });
+          stored_entry.forEach((entry) => {
+            add_row_to_Table(entry);
+          });
+        }
       }
 
       function submitInfo() {
@@ -155,30 +172,16 @@
         const getIncome = document.getElementById("Income_");
         const getExpenditure = document.getElementById("Expenditure_");
 
-        let getCategory = "";
-        if (getIncome.checked) {
-          getCategory = getIncome.value;
-        } else if (getExpenditure.checked) {
-          getCategory = getExpenditure.value;
-        } else {
-          return;
-        }
-
         const items = document.getElementById("items").value;
         const amount = document.getElementById("amount").value;
         const date = document.getElementById("date").value;
 
         const entry = {
-          Category: getCategory,
+          Category: getIncome.checked ? getIncome.value : getExpenditure.value,
           Item: items,
           Amount: amount,
           Date: date,
         };
-
-        // check if any input is empty
-        if (!entry.Item || !entry.Amount || !entry.Date) {
-          return;
-        }
 
         add_row_to_Table(entry);
 
@@ -222,15 +225,15 @@
       // save the item in localstorage
       function saveData(entry) {
         const stored_entry =
-          JSON.parse(localStorage.getItem("Users_Input")) || [];
+          JSON.parse(localStorage.getItem("UserInput")) || [];
         stored_entry.push(entry);
-        localStorage.setItem("Users_Input", JSON.stringify(stored_entry));
+        localStorage.setItem("UserInput", JSON.stringify(stored_entry));
+        saveLocal();
       }
 
       // remove item in localStorage
       function removeData(entry) {
-        let stored_entry =
-          JSON.parse(localStorage.getItem("Users_Input")) || [];
+        let stored_entry = JSON.parse(localStorage.getItem("UserInput")) || [];
         stored_entry = stored_entry.filter(
           (e) =>
             e.Category !== entry.Category ||
@@ -239,13 +242,39 @@
             e.Date !== entry.Date
         );
 
-        localStorage.setItem("Users_Input", JSON.stringify(stored_entry));
+        localStorage.setItem("UserInput", JSON.stringify(stored_entry));
       }
       document
-        .getElementById("myform")
+        .getElementById("inp-exp-form")
         .addEventListener("submit", function (e) {
           e.preventDefault();
         });
+
+      function saveLocal() {
+        let all_data = JSON.parse(localStorage.getItem("all_data")) || {
+          income: [],
+          expenditure: [],
+        };
+        let items = JSON.parse(localStorage.getItem("UserInput")) || [];
+        items.forEach((element) => {
+          category = element.Item;
+          amount = element.Amount;
+          date = element.Date;
+          if (element.Category === "Income") {
+            all_data.income.push({ category, amount, date });
+          } else {
+            all_data.expenditure.push({ category, amount, date });
+          }
+        });
+        localStorage.setItem("all_data", JSON.stringify(all_data));
+      }
+
+      window.onload = function () {
+        saveLocal();
+        load_data();
+        checkLogin();
+        changeTheme();
+      };
     </script>
   </body>
 </html>

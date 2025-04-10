@@ -1,36 +1,44 @@
-:root{
-  --base-background-color : rgb(245, 245, 245);
-  --menu-background-color : rgb(0, 255, 73, 30%);
-  --side-menu-background-color : rgb(109, 227, 188);
-  --side-menu-hover : rgb(54, 107, 89);
-  --login-button-background :rgb(85, 216, 127);
+:root {
+  --base-background-color: rgb(245, 245, 245);
+  --menu-background-color: rgb(0, 255, 73, 30%);
+  --side-menu-background-color: rgb(109, 227, 188);
+  --side-menu-hover: rgb(54, 107, 89);
+  --login-button-background: rgb(85, 216, 127);
   --account-box-background: white;
-  --text-color : black;
-  --input-box-color : white;
-  --input-box-text-color : black;
-  --input-box-border :#ccc ;
-  --create-acc-color : blue;
-  --box-shadow : rgb(200, 200, 200);
+  --text-color: black;
+  --input-box-color: white;
+  --input-box-text-color: black;
+  --input-box-border: #ccc;
+  --create-acc-color: blue;
+  --box-shadow: rgb(200, 200, 200);
   --inc-exp-th-background: rgb(130, 130, 130);
   --inc-exp-td-background-odd: rgb(178, 178, 178);
   --inc-exp-td-background-even: rgb(152, 152, 152);
+  --ana-graph-header-background: #d5d5d5;
+  --ana-graph-header-text: black;
+  --ana-graph-button-background: #919191;
+  --confirm-buttons-background: #2196f3;
+  --confirm-buttons-background-hover: rgb(19, 188, 255);
 }
-.dark-mode{
-  --base-background-color : #1A1A1A; 
-  --account-box-background: #1F1F1F;
-  --side-menu-background-color : rgb(52, 107, 89);
-  --side-menu-hover : rgb(45, 81, 69);
+.dark-mode {
+  --base-background-color: #1a1a1a;
+  --account-box-background: #1f1f1f;
+  --side-menu-background-color: rgb(52, 107, 89);
+  --side-menu-hover: rgb(45, 81, 69);
   --input-box-color: black;
-  --text-color : white ; 
-  --input-box-border: #3A3A3A;
-  --create-acc-color : #2196F3;
-  --input-box-text-color : white;
-  --box-shadow : rgb(37, 37, 37);
+  --text-color: #ccc;
+  --input-box-border: #3a3a3a;
+  --create-acc-color: #2196f3;
+  --input-box-text-color: #ccc;
+  --box-shadow: rgb(37, 37, 37);
   --inc-exp-th-background: rgb(47, 47, 47);
   --inc-exp-td-background-odd: rgb(65, 65, 65);
   --inc-exp-td-background-even: rgb(96, 96, 96);
+  --ana-graph-header-background: #444444;
+  --ana-graph-header-text: #ccc;
+  --ana-graph-button-background: #444444;
 }
-#dark-icon{
+#dark-icon {
   width: 40px;
   height: 40px;
   fill: #454545;
@@ -38,11 +46,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-} 
-#dark-icon:hover{
+}
+#dark-icon:hover {
   background-color: #87ae87;
 }
-#light-icon{
+#light-icon {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -50,7 +58,7 @@
   align-items: center;
   display: none;
 }
-#light-icon:hover{
+#light-icon:hover {
   background-color: #8aaf81;
 }
 body {
@@ -59,9 +67,9 @@ body {
   margin: 0;
   padding: 0;
   color: var(--text-color);
-  transition: background-color 0.5s;
+  /* transition: background-color 0.5s; */
 }
-.box { 
+.box {
   display: flex;
   height: 90vh;
 }
@@ -73,7 +81,7 @@ body {
   width: 100%;
   height: 60px;
 }
-.side-menu-background{
+.side-menu-background {
   display: none;
   position: fixed;
   z-index: 1;
@@ -81,7 +89,7 @@ body {
   width: 100%;
   background-color: rgb(0, 0, 0, 0.5);
 }
-.side-menu{
+.side-menu {
   position: fixed;
   height: 100%;
   width: 0;
@@ -93,33 +101,32 @@ body {
   transition: 0.5s;
   padding-top: 60px;
 }
-.side-menu .side-title{
+.side-menu .side-title {
   position: absolute;
   font-size: 48px;
   top: 10px;
   right: 170px;
   padding: 0;
 }
-.side-menu a{
+.side-menu a {
   text-decoration: none;
   display: block;
   font-size: 25px;
-  color:black;
+  color: black;
   padding: 8px 8px 8px 20px;
   transition: 0.3s;
   height: 5%;
   line-height: 100%;
-
 }
-.side-menu .links{
+.side-menu .links {
   white-space: nowrap;
 }
-.side-menu .links a:hover{
+.side-menu .links a:hover {
   display: flex;
   flex-direction: column;
   background-color: var(--side-menu-hover);
 }
-.side-menu .closeButton{
+.side-menu .closeButton {
   position: absolute;
   color: black;
   font-size: 50px;
@@ -127,14 +134,13 @@ body {
   right: 30px;
 }
 
-
 .menu-title {
   font-size: 35px;
   height: 52px;
   line-height: 60px;
-  margin-right: 5px
+  margin-right: 5px;
 }
-.pig-img{
+.pig-img {
   height: 60px;
 }
 .menu-button {
@@ -146,17 +152,17 @@ body {
   line-height: 60px;
   float: left;
 }
-.menu-button:hover{
+.menu-button:hover {
   cursor: pointer;
 }
-.change-theme{
+.change-theme {
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
 }
 
-.login{
+.login {
   margin-right: 10px;
 }
 #login #login-link {
@@ -168,30 +174,33 @@ body {
   border: 1px solid;
   border-radius: 5px;
   background-color: var(--login-button-background);
-} 
-.login-theme-box{
+}
+.login-theme-box {
   width: 500px;
   display: flex;
   justify-content: flex-end;
   margin-right: 10px;
 }
-#login #name{
+#login #name {
   font-size: 30px;
   line-height: 60px;
 }
-#login #name a{
+#login #name a {
   color: var(--text-color);
 }
 .login-box,
-.create-acc-box {
+.create-acc-box,
+.ana-graph-box,
+.inc-exp-box,
+.ana-box {
   background-color: var(--account-box-background);
   margin: auto;
   position: relative;
   text-align: center;
-  width: 400px;
-  height: 400px;
+  max-width: 1000px;
   border-radius: 10px;
   box-shadow: 2px 2px 5px var(--box-shadow);
+  padding: 20px;
 }
 .login-box input,
 .create-acc-box input,
@@ -208,31 +217,33 @@ body {
 #confirm-password,
 #items,
 #amount,
-#date {
+#date,
+.form-group input {
   margin: 10px;
   height: 2.5em;
   width: 300px;
   border-radius: 4px;
   border: 1px solid var(--input-box-border);
-  color : var(--input-box-text-color);
+  color: var(--input-box-text-color);
 }
 #submit-psw,
 #submit-acc,
 #submit_message {
   width: 300px;
   height: 2.5em;
-  background-color:  #2196F3;
+  background-color: var(--confirm-buttons-background);
   margin: 10px;
   border-radius: 4px;
   font-size: 1.1em;
   cursor: pointer;
+  transition: 0s;
 }
 #submit-psw:hover,
-#submit-acc:hover{
-  background-color: rgba(0, 183, 255, 0.5);
+#submit-acc:hover {
+  background-color: var(--confirm-buttons-background-hover);
 }
 #submit-psw:active,
-#submit-acc:active{
+#submit-acc:active {
   background-color: rgba(0, 183, 255, 0.8);
 }
 #create-account a:link,
@@ -250,10 +261,6 @@ body {
   margin-top: 10px;
 }
 
-
-
-
-
 #IncomeOrExpenditure-choice,
 #item-input,
 #amount-input,
@@ -261,6 +268,9 @@ body {
 #date-input {
   text-align: center;
   margin: 10px 0;
+}
+#submit_message:hover {
+  background-color: var(--confirm-buttons-background-hover);
 }
 
 #theTable {
@@ -296,4 +306,116 @@ body {
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
+}
+
+.header {
+  text-align: center;
+  background-color: var(--ana-graph-header-background);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  color: var(--ana-graph-header-text);
+}
+
+#expense-form input {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: var(--account-box-background);
+  color: var(--text-color);
+}
+
+#expense-form button {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: var(--confirm-buttons-background);
+  font-weight: bold;
+  cursor: pointer;
+  color: #fff;
+}
+
+#expense-form button:hover {
+  background-color: var(--confirm-buttons-background-hover);
+}
+
+.chart-container {
+  margin-top: 20px;
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+  max-width: 500px;
+  max-height: 500px;
+  display: inline-flex;
+}
+.expense-list {
+  margin-top: 20px;
+}
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+.actions button {
+  width: 50%;
+  height: 40px;
+  background-color: var(--confirm-buttons-background);
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  color: #fff;
+  font-weight: bold;
+}
+.actions button:hover {
+  cursor: pointer;
+  background-color: var(--confirm-buttons-background-hover);
+}
+#clear-data {
+  background-color: red;
+}
+#clear-data:hover {
+  background-color: rgb(255, 78, 78);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+#expense-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+.actions button {
+  width: 50%;
+  height: 30px;
+}
+.actions button:hover {
+  cursor: pointer;
+}
+.delete-button {
+  background-color: #ff6347;
+  border: none;
+  padding: 5px 5px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  width: 300px;
+}
+.delete-button:hover {
+  background-color: #ff4500;
 }
