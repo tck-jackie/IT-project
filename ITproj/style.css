@@ -67,7 +67,6 @@ body {
   margin: 0;
   padding: 0;
   color: var(--text-color);
-  /* transition: background-color 0.5s; */
 }
 .box {
   display: flex;
@@ -204,9 +203,9 @@ body {
 }
 .login-box input,
 .create-acc-box input,
-.inp-exp-form input {
-  background-color: var(--input-box-color);
-  transition: border, background-color 0.5s;
+.inp-exp-form input,
+.ana-form input {
+  background-color: var(--account-box-background);
 }
 .title {
   font-size: 3em;
@@ -271,6 +270,14 @@ body {
 }
 #submit_message:hover {
   background-color: var(--confirm-buttons-background-hover);
+}
+
+.alert-box {
+  display: flex;
+  flex-direction: column;
+}
+.alert-box span {
+  height: 1.5em;
 }
 
 #theTable {
