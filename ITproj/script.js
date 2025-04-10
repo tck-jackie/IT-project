@@ -1,35 +1,34 @@
 //Menu open and close
-function openMenu(){
+function openMenu() {
   document.getElementById("side-menu").style.width = "300px";
   document.getElementById("side-menu-background").style.display = "block";
 }
-function closeMenu(){
+function closeMenu() {
   document.getElementById("side-menu").style.width = "0";
   document.getElementById("side-menu-background").style.display = "none";
 }
 
-//load theme 
-function loadTheme(){
+//load theme
+function loadTheme() {
   let theme = localStorage.getItem("Theme");
-  if (theme !== null){
-    if (theme !== "light-theme"){
+  if (theme !== null) {
+    if (theme !== "light-theme") {
       document.body.classList.toggle("dark-mode");
     }
-    return ;
+    return;
   }
-  theme = "light-theme"
-  localStorage.setItem("Theme", theme)
+  theme = "light-theme";
+  localStorage.setItem("Theme", theme);
 }
 
 // change theme
-function changeTheme(){
-  let change = document.body.classList.toggle("dark-mode")
-  if (change === true){
+function changeTheme() {
+  let change = document.body.classList.toggle("dark-mode");
+  if (change === true) {
     localStorage.setItem("Theme", "dark-theme");
     document.getElementById("dark-icon").style.display = "none";
     document.getElementById("light-icon").style.display = "flex";
-  }
-  else{
+  } else {
     localStorage.setItem("Theme", "light-theme");
     document.getElementById("dark-icon").style.display = "flex";
     document.getElementById("light-icon").style.display = "none";
@@ -37,18 +36,17 @@ function changeTheme(){
 }
 let UserName = null;
 //function to check login state
-function checkLogin(){
-  if (document.cookie === ""){
-    window.alert("Please Login first")
-    window.location = "login.html"
-  }
-  else{
-    UserName = document.cookie.split("=")[1]
+function checkLogin() {
+  if (document.cookie === "") {
+    window.alert("Please Login first");
+    window.location = "login.html";
+  } else {
+    UserName = document.cookie.split("=")[1];
     document.getElementById("login").innerHTML = `
         <div id="name">
           <a href="login.html" title="Click here to change account"> Welcome ${UserName} </a>
         </div>
-        `
+        `;
   }
 }
 
@@ -59,17 +57,17 @@ function checkLoginPassword() {
   if (regex.test(password)) {
     const userName = document.getElementById("user-name").value;
     if (findUser(userName, password)) {
-        setCookie(userName, 120)
-        document.getElementById("login").innerHTML = `
+      setCookie(userName, 120);
+      document.getElementById("login").innerHTML = `
         <div id="name">
           <a href="login.html" title="Click here to change account"> Welcome ${userName} </a>
         </div>
-        `
-        window.location = "Income-Expenditure.html"
+        `;
+      window.location = "Income-Expenditure.html";
     }
-  }
-  else{
-    document.getElementById("alert-text").innerHTML = "The password must be at least 8 characters long. \
+  } else {
+    document.getElementById("alert-text").innerHTML =
+      "The password must be at least 8 characters long. \
                                                        \nContains lowercase & capital letter";
   }
 }
@@ -77,23 +75,25 @@ function checkLoginPassword() {
 function findUser(username, password) {
   //define a flag whether the user exist
   let user_found = false;
-  const UserInfo = JSON.parse(localStorage.getItem("UserInfo")) || []
+  const UserInfo = JSON.parse(localStorage.getItem("UserInfo")) || [];
   Object.keys(UserInfo).forEach((user_id) => {
     if (username === user_id) {
       if (password === UserInfo[user_id]) {
         user_found = true;
-        return ;
+        return;
       } else {
-        //if the username is same but the password is wrong => tell user password wrong and return 
-        document.getElementById("alert-text").innerHTML = "The password is wrong";
-        return ;
+        //if the username is same but the password is wrong => tell user password wrong and return
+        document.getElementById("alert-text").innerHTML =
+          "The password is wrong";
+        return;
       }
     }
   });
   if (user_found) {
     return true;
   }
-  document.getElementById("alert-text").innerHTML = "Can't find the user. Please login again.";
+  document.getElementById("alert-text").innerHTML =
+    "Can't find the user. Please login again.";
   document.getElementById("password").value = "";
   return false;
 }
@@ -129,9 +129,8 @@ function createAccount(username, password) {
   window.location = "login.html";
 }
 
-function setCookie(username, mins){
+function setCookie(username, mins) {
   const date = new Date();
-  date.setTime(date.getTime() + mins * 60 * 1000)
-  document.cookie = `username=${username}; expires=${date.toUTCString()}`
+  date.setTime(date.getTime() + mins * 60 * 1000);
+  document.cookie = `username=${username}; expires=${date.toUTCString()}`;
 }
-

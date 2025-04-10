@@ -83,12 +83,12 @@
             required
           />
 
-          <label for="Expenditure_">Expenditure</label>
+          <label for="Expenses_">Expenses</label>
           <input
             type="radio"
-            id="Expenditure_"
+            id="Expenses_"
             name="Category"
-            value="Expenditure"
+            value="Expenses"
             required
           />
         </div>
@@ -145,42 +145,56 @@
       </table>
     </div>
     <script>
+      let all_data;
+      let stored_entry = [];
       function load_data() {
-        let all_data = JSON.parse(localStorage.getItem("all_data"));
-        if (all_data !== null) {
-          const stored_entry = [];
-          let Category = "Income";
+        all_data = JSON.parse(localStorage.getItem("all_data"));
+        init_all_data = { income: [], expenses: [] };
+        if (all_data !== null && all_data !== init_all_data) {
+          // initialize stored_entry
+          let type = "Income";
           all_data.income.forEach((element) => {
-            Item = element.category;
-            Amount = element.amount;
-            stored_entry.push({ Category, Item, Amount, Date: element.date });
+            category = element.category;
+            amount = element.amount;
+            date = element.date;
+            stored_entry.push({ type, category, amount, date });
           });
-          Category = "Expenditure";
-          all_data.expenditure.forEach((element) => {
-            Item = element.category;
-            Amount = element.amount;
-            stored_entry.push({ Category, Item, Amount, Date: element.date });
+          type = "Expenses";
+          all_data.expenses.forEach((element) => {
+            category = element.category;
+            amount = element.amount;
+            date = element.date;
+            stored_entry.push({ type, category, amount, date });
           });
           stored_entry.forEach((entry) => {
             add_row_to_Table(entry);
           });
+        } else {
+          all_data = init_all_data;
+          localStorage.setItem("all_data", JSON.stringify(all_data));
         }
       }
 
       function submitInfo() {
         // get the input from users
         const getIncome = document.getElementById("Income_");
-        const getExpenditure = document.getElementById("Expenditure_");
+        const getExpenditure = document.getElementById("Expenses_");
 
         const items = document.getElementById("items").value;
         const amount = document.getElementById("amount").value;
         const date = document.getElementById("date").value;
+        let type;
+        if (getIncome.checked) {
+          type = "Income";
+        } else {
+          type = "Expenses";
+        }
 
         const entry = {
-          Category: getIncome.checked ? getIncome.value : getExpenditure.value,
-          Item: items,
-          Amount: amount,
-          Date: date,
+          type: type,
+          category: items,
+          amount: amount,
+          date: date,
         };
 
         add_row_to_Table(entry);
@@ -203,10 +217,10 @@
 
         const addnewRow = tablebody.insertRow();
 
-        addnewRow.insertCell(0).textContent = entry.Category;
-        addnewRow.insertCell(1).textContent = entry.Item;
-        addnewRow.insertCell(2).textContent = entry.Amount;
-        addnewRow.insertCell(3).textContent = entry.Date;
+        addnewRow.insertCell(0).textContent = entry.type;
+        addnewRow.insertCell(1).textContent = entry.category;
+        addnewRow.insertCell(2).textContent = entry.amount;
+        addnewRow.insertCell(3).textContent = entry.date;
 
         // the choice of removing the row
         const remove_row = document.createElement("button");
@@ -224,53 +238,55 @@
 
       // save the item in localstorage
       function saveData(entry) {
-        const stored_entry =
-          JSON.parse(localStorage.getItem("UserInput")) || [];
+        // save data into all_data first
+        category = entry.category;
+        amount = entry.amount;
+        date = entry.date;
+        if (entry.type === "Income") {
+          all_data.income.push({ category, amount, date });
+        } else {
+          all_data.expenses.push({ category, amount, date });
+        }
+
         stored_entry.push(entry);
-        localStorage.setItem("UserInput", JSON.stringify(stored_entry));
-        saveLocal();
+        // use all_data to set to local storage
+        localStorage.setItem("all_data", JSON.stringify(all_data));
       }
 
       // remove item in localStorage
       function removeData(entry) {
-        let stored_entry = JSON.parse(localStorage.getItem("UserInput")) || [];
+        // remove the item in entry
         stored_entry = stored_entry.filter(
-          (e) =>
-            e.Category !== entry.Category ||
-            e.Item !== entry.Item ||
-            e.Amount !== entry.Amount ||
-            e.Date !== entry.Date
+          (element) =>
+            element.type !== entry.type ||
+            element.category !== entry.category ||
+            element.Amount !== entry.Amount ||
+            element.Date !== entry.Date
         );
 
-        localStorage.setItem("UserInput", JSON.stringify(stored_entry));
+        all_data = init_all_data;
+        // change items in all_data
+        stored_entry.forEach((element) => {
+          category = element.category;
+          amount = element.amount;
+          date = element.date;
+          if (element.type === "Income") {
+            all_data.income.push({ category, amount, date });
+          } else {
+            all_data.expenses.push({ category, amount, date });
+          }
+        });
+
+        localStorage.setItem("all_data", JSON.stringify(all_data));
       }
+
       document
         .getElementById("inp-exp-form")
         .addEventListener("submit", function (e) {
           e.preventDefault();
         });
 
-      function saveLocal() {
-        let all_data = JSON.parse(localStorage.getItem("all_data")) || {
-          income: [],
-          expenditure: [],
-        };
-        let items = JSON.parse(localStorage.getItem("UserInput")) || [];
-        items.forEach((element) => {
-          category = element.Item;
-          amount = element.Amount;
-          date = element.Date;
-          if (element.Category === "Income") {
-            all_data.income.push({ category, amount, date });
-          } else {
-            all_data.expenditure.push({ category, amount, date });
-          }
-        });
-        localStorage.setItem("all_data", JSON.stringify(all_data));
-      }
-
       window.onload = function () {
-        saveLocal();
         load_data();
         checkLogin();
         changeTheme();
