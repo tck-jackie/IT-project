@@ -21,7 +21,6 @@
       <a href="#" onclick="closeMenu()" class="closeButton">&times;</a>
       <div class="links">
         <a href="Income-Expenditure.html">Income & Expenditure</a>
-        <a href="expense-tracker.html">Analysis Graph</a>
         <a href="analysis.html">Analysis</a>
       </div>
     </div>
@@ -129,6 +128,15 @@
         </div>
       </form>
 
+      <div class="alert-box">
+        <span> Current Income: <span id="income-number">0</span> </span>
+        <span> Current Expenses: <span id="expenses-number">0</span> </span>
+        <span style="visibility: hidden; color: red" id="alert-message">
+          You reach the limit!!! You need to have a better plan to use money!
+        </span>
+      </div>
+      <!-- TODO set numbers -->
+
       <br />
       <p id="demo"></p>
       <table id="theTable">
@@ -183,12 +191,7 @@
         const items = document.getElementById("items").value;
         const amount = document.getElementById("amount").value;
         const date = document.getElementById("date").value;
-        let type;
-        if (getIncome.checked) {
-          type = "Income";
-        } else {
-          type = "Expenses";
-        }
+        const type = getIncome.checked ? "Income" : "Expenses";
 
         const entry = {
           type: type,
@@ -200,7 +203,7 @@
         add_row_to_Table(entry);
 
         saveData(entry);
-
+        showTotalSum();
         // clear the input inside the current table
         getIncome.checked = false;
         getExpenditure.checked = false;
@@ -209,6 +212,28 @@
         document.getElementById("date").value = "";
       }
 
+      function showTotalSum() {
+        const income_num = document.getElementById("income-number");
+        const expenses_num = document.getElementById("expenses-number");
+        let income_sum = 0;
+        let expenses_sum = 0;
+        all_data.income.forEach((element) => {
+          income_sum += Number(element.amount);
+        });
+        all_data.expenses.forEach((element) => {
+          expenses_sum += Number(element.amount);
+        });
+        income_num.innerHTML = income_sum;
+        expenses_num.innerHTML = expenses_sum;
+        checkOverBuget(income_sum, expenses_sum);
+      }
+      function checkOverBuget(income_sum, expenses_sum) {
+        if (expenses_sum > income_sum) {
+          document.getElementById("alert-message").style.visibility = "visible";
+        } else {
+          document.getElementById("alert-message").style.visibility = "hidden";
+        }
+      }
       // create new rows after the users submitted the input
       function add_row_to_Table(entry) {
         const tablebody = document
@@ -290,6 +315,7 @@
         load_data();
         checkLogin();
         changeTheme();
+        showTotalSum();
       };
     </script>
   </body>
